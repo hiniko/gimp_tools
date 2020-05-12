@@ -120,10 +120,10 @@ def spritesheet2layers(image, cell_x_px, cell_y_px, cells_per_row, skip_even_cel
     l.name = "Cell " + str(idx)
 
     x_offset = ((idx % cells_per_row) * cell_x_px) + ((cell_x_px - l.width ) / 2)
-    if offset_bottom == 0:
+    y_offset = round((idx / cells_per_row) * cell_y_px) + ((cell_y_px - l.height) / 2)
+
+    if offset_bottom > 0:
       y_offset = round((idx / cells_per_row) * cell_y_px) + (cell_x_px - offset_bottom - l.height)
-    else:
-      y_offset = round((idx / cells_per_row) * cell_y_px) + ((cell_x_px - l.height) / 2)
 
     pdb.gimp_layer_set_offsets(l, x_offset, y_offset)
     #print(idx, l.name, orig_offsets, " -> ", l.offsets)
@@ -133,7 +133,7 @@ def spritesheet2layers(image, cell_x_px, cell_y_px, cells_per_row, skip_even_cel
   image_width = cell_x_px * cells_per_row
   image_height = round(cell_y_px * ((round(layer_count, -1) + cells_per_row) / cells_per_row ))
 
-  if not skip_even_cells:
+  if skip_even_cells:
     image_height = image_height - cell_y_px
 
   pdb.gimp_image_resize(img, image_width, image_height, 0,0)
@@ -218,7 +218,7 @@ register(
         (PF_INT8, "cell_y_px", "Cell Size Y",  150),
         (PF_INT8, "cells_per_row", "Cells Per Row", 10),
         (PF_BOOL, "skip_even_cells", "Skip Even Cells", False),
-        (PF_INT8, "bottom_offset", "Offset from bottom", 30),
+        (PF_INT8, "bottom_offset", "Offset from bottom", 0),
         (PF_BOOL, "new_guides", "Make new guides", True),
         (PF_BOOL, "new_sub_guides", "Make new sub guides", True)
 
