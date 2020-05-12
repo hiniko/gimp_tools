@@ -20,7 +20,8 @@
 # - Skip Even Cells: If you are dealing with a sheet that does not already have contiguous cells, and has evenly spaced gaps enable this option
 #     assuming that your first intersection of guides defines the first sprite, each area afterwards should empty as well as the next row.
 #     This assumption is much faster and easier then checking every pixel.
-# - Bottom Offset: This is the amount in px from the bottom the sprite should be. Use this for automatic vertical alignment
+# - Bottom Offset: Use this for automatic vertical alignment. This is the amount in px from the bottom the sprite should be. If
+#      0, it the cell with be vertically centered
 # - New Guides: If enabled the scipt clears old guides and then creates a new set of gudides based on Cell Width and Cell Height
 # - New Sub Guides: If enabled with new Guides it will create more guides that are half of cell width and cell height. This is useful for
 #     further manual alignment 
@@ -119,7 +120,10 @@ def spritesheet2layers(image, cell_x_px, cell_y_px, cells_per_row, skip_even_cel
     l.name = "Cell " + str(idx)
 
     x_offset = ((idx % cells_per_row) * cell_x_px) + ((cell_x_px - l.width ) / 2)
-    y_offset = round((idx / cells_per_row) * cell_y_px) + (cell_x_px - offset_bottom - l.height)
+    if offset_bottom == 0:
+      y_offset = round((idx / cells_per_row) * cell_y_px) + (cell_x_px - offset_bottom - l.height)
+    else:
+      y_offset = round((idx / cells_per_row) * cell_y_px) + ((cell_x_px - l.height) / 2)
 
     pdb.gimp_layer_set_offsets(l, x_offset, y_offset)
     #print(idx, l.name, orig_offsets, " -> ", l.offsets)
