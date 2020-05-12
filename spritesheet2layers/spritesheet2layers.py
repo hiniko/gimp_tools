@@ -130,7 +130,13 @@ def spritesheet2layers(image, cell_x_px, cell_y_px, cells_per_row, skip_even_cel
 
   layer_count = len(img.layers)
 
-  pdb.gimp_image_resize(img, cell_x_px * cells_per_row, round(cell_y_px * ((round(layer_count, -1) + cells_per_row) / cells_per_row )), 0,0)
+  image_width = cell_x_px * cells_per_row
+  image_height = round(cell_y_px * ((round(layer_count, -1) + cells_per_row) / cells_per_row ))
+
+  if not skip_even_cells:
+    image_height = image_height - cell_y_px
+
+  pdb.gimp_image_resize(img, image_width, image_height, 0,0)
 
   # Make new guides with sub guides if neededkj
   if new_guides:
